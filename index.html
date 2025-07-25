@@ -21,6 +21,8 @@
       overflow: hidden;
       position: fixed;
       inset: 0;
+      max-width: 100vw;
+      max-height: 100vh;
     }
 
     .falling-img {
@@ -84,7 +86,9 @@
     const fallDuration = (2 + Math.random() * 3).toFixed(2); // 2–5 сек
     const spinSpeed = (0.5 + Math.random() * 2).toFixed(2); // 0.5–2.5 оборота
 
-    img.style.left = Math.random() * window.innerWidth + 'px';
+    const imgWidth = 300;
+    const maxLeft = window.innerWidth - imgWidth;
+    img.style.left = Math.random() * (maxLeft > 0 ? maxLeft : 0) + 'px';
     img.style.animationDuration = fallDuration + 's';
     img.style.transform = `scale(0.1) rotate(${Math.random() * 360}deg)`;
     img.style.animationTimingFunction = 'linear';
