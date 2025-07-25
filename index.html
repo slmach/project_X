@@ -8,8 +8,17 @@
       margin: 0;
       overflow: hidden;
       height: 100vh;
-      background: #0f0;
+      /* background: #0f0; */
       cursor: pointer;
+      width: 100vw;
+      padding: 0;
+    }
+    html {
+      width: 100vw;
+      height: 100vh;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
     }
 
     .falling-img {
@@ -28,9 +37,14 @@
       left: 0;
       width: 100vw;
       height: 100vh;
+      min-width: 100vw;
+      min-height: 100vh;
       object-fit: cover;
       z-index: -1;
       pointer-events: none;
+      margin: 0;
+      padding: 0;
+      background: #000;
     }
 
     @keyframes fall {
