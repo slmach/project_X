@@ -96,6 +96,18 @@
       intervalId = setInterval(createFallingImage, interval);
     }
   });
+
+  document.body.addEventListener('touchstart', (e) => {
+    e.preventDefault(); // чтобы не было лишних скроллов
+    if (!fallingStarted) {
+      fallingStarted = true;
+      intervalId = setInterval(createFallingImage, interval);
+    } else {
+      if (interval > 20) interval -= 15;
+      clearInterval(intervalId);
+      intervalId = setInterval(createFallingImage, interval);
+    }
+  }, { passive: false });
 </script>
 </body>
 </html>
