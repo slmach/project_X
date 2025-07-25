@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Падающие и крутящиеся картинки</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      height: 100vh;
+      background: #0f0;
+      cursor: pointer;
+    }
+
+    .falling-img {
+      position: absolute;
+      top: -100px;
+      /* width: 50px; */
+      /* height: 50px; */
+      pointer-events: none;
+      animation-name: fall;
+      animation-timing-function: linear;
+    }
+
+    .background-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    @keyframes fall {
+      0% {
+        transform: translateY(-100px) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        /* translateY: высота окна минус 100px (купюра "останавливается" чуть ниже экрана) */
+        transform: translateY(calc(100vh - 100px)) rotate(1turn);
+        opacity: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+<video class="background-video" src="video/pav.MOV" autoplay loop muted playsinline></video>
+<script>
+  const imgUrl = 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Banknote_5000_rubles_%281997%29_front.jpg/960px-Banknote_5000_rubles_%281997%29_front.jpg';
+
+  let fallingStarted = false;
+  let interval = 100;
+  let intervalId = null;
+
+  function createFallingImage() {
+    const img = document.createElement('img');
+    img.src = imgUrl;
+    img.className = 'falling-img';
+    img.style.width = '300px'; // Явная ширина (увеличено в 1,5 раза)
+    img.style.height = 'auto'; // Сохраняем пропорции
+
+    const fallDuration = (2 + Math.random() * 3).toFixed(2); // 2–5 сек
+    const spinSpeed = (0.5 + Math.random() * 2).toFixed(2); // 0.5–2.5 оборота
+
+    img.style.left = Math.random() * window.innerWidth + 'px';
+    img.style.animationDuration = fallDuration + 's';
+    img.style.transform = `scale(0.1) rotate(${Math.random() * 360}deg)`;
+    img.style.animationTimingFunction = 'linear';
+
+    img.style.setProperty('--spin', spinSpeed + 'turn');
+
+    img.animate([
+      { transform: `translateY(-100px) rotate(0deg)`, opacity: 1 },
+      { transform: `translateY(110vh) rotate(${spinSpeed}turn)`, opacity: 1 }
+    ], {
+      duration: fallDuration * 1000,
+      easing: 'linear',
+      fill: 'forwards'
+    });
+
+    document.body.appendChild(img);
+    setTimeout(() => img.remove(), fallDuration * 1000 + 1000);
+  }
+
+  document.body.addEventListener('click', () => {
+    if (!fallingStarted) {
+      fallingStarted = true;
+      intervalId = setInterval(createFallingImage, interval);
+    } else {
+      // Увеличиваем частоту появления купюр (уменьшаем интервал)
+      if (interval > 20) interval -= 15;
+      clearInterval(intervalId);
+      intervalId = setInterval(createFallingImage, interval);
+    }
+  });
+</script>
+</body>
+</html>
